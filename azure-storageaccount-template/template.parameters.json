@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "Name": {
+        "value": "azwikilogs0103"
+      },
+      "StorageAccountTypes": {
+        "value": "Zone Redundant Storage (3 different AZs)"
+      },
+      "Kind": {
+        "value": "StorageV2"
+      },
+      "AccessTier": {
+        "value": "Hot"
+      },
+      "ContainerName": {
+        "value": "reports"
+      }
+    }
+  }
