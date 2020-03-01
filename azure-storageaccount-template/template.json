@@ -2,43 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "Name": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 24
-        },
         "StorageAccountTypes": {
-            "type": "string",
             "allowedValues": [
                 "Locally Redundant Storage (1 single location)",
                 "Geo Replicated Storage (1 single location + 1 secondary location)",
                 "Zone Redundant Storage (3 different AZs)",
                 "Read-Access Geo Replicated Storage"
             ],
+            "type": "String",
             "metadata": {
                 "description": "Select option for your Storage data redundancy."
             }
         },
         "Kind": {
-            "type": "string",
+            "defaultValue": "StorageV2",
             "allowedValues": [
                 "StorageV2",
                 "BlobStorage",
                 "FileStorage",
                 "BlockBlobStorage"
             ],
-            "defaultValue": "StorageV2"
+            "type": "String"
         },
         "AccessTier": {
-            "type": "string",
             "allowedValues": [
                 "Hot",
                 "Cold",
                 "Archive"
-            ]
+            ],
+            "type": "String"
         },
         "ContainerName": {
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "Create a private container in Storage Blobs"
             }
@@ -47,7 +42,7 @@
     "variables": {
         "suffix": "[toLower(uniqueString(resourceGroup().id, resourceGroup().location))]",
         "location": "[resourceGroup().location]",
-        "storageName": "[substring(concat(parameters('Name'), variables('suffix')), 3, 24)]",
+        "uniquestorageName": "[substring(concat('storageaccount',variables('suffix')),0, 24)]",
         "SKUs": {
             "Locally Redundant Storage (1 single location)": {
                 "name": "Standard_LRS"
@@ -65,49 +60,49 @@
         "containerName": "[substring(concat(parameters('ContainerName'),variables('suffix')),0,20)]"
     },
     "resources": [
-            {
-                "name": "[variables('storageName')]",
-                "type": "Microsoft.Storage/storageAccounts",
-                "apiVersion": "2019-04-01",
-                "location": "[variables('location')]",
-                "sku": {
-                    "name": "[variables('SKUs')[parameters('StorageAccountTypes')].name]",
-                    "tier": "Standard"
-                },
-                "kind": "[parameters('Kind')]",
-                "identity": {
-                    "type": "SystemAssigned"
-                },
-                "tags": {
-                    "displayName": "[variables('storageName')]"
-                },
-                "properties": {
-                    "accessTier": "[parameters('AccessTier')]",
-                    "supportsHttpsTrafficOnly": false
-                },
-                "resources": [
-                    {
-                        "name": "[variables('containerName')]",
-                        "type": "blobServices/containers",
-                        "apiVersion": "2019-04-01",
-                        "properties": {
-                            "publicAccess": "Container"
-                        },
-                        "dependsOn": [
-                            "[variables('storageName')]"
-                        ]
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "name": "[variables('uniquestorageName')]",
+            "location": "[variables('location')]",
+            "tags": {
+                "displayName": "[variables('uniquestorageName')]"
+            },
+            "sku": {
+                "name": "[variables('SKUs')[parameters('StorageAccountTypes')].name]",
+                "tier": "Standard"
+            },
+            "kind": "[parameters('Kind')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "accessTier": "[parameters('AccessTier')]",
+                "supportsHttpsTrafficOnly": false
+            },
+            "resources": [
+                {
+                    "type": "blobServices/containers",
+                    "apiVersion": "2019-04-01",
+                    "name": "[concat('default/', variables('containerName'))]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Storage/storageAccounts/', variables('uniquestorageName'))]"
+                    ],
+                    "properties": {
+                        "publicAccess": "Blob"
                     }
-                ]
-            }
+                }
+            ]
+        }
     ],
     "outputs": {
         "Storage Name": {
-            "type": "string",
-            "value": "[variables('storageName')]"
+            "type": "String",
+            "value": "[variables('uniquestorageName')]"
         },
-        "Storage Endpoint": {
-            "type": "string",
-            "value": "[reference(variables('storageName'),'2019-04-01', 'Full').PrimaryEndpoints.Blob]"
+        "Storage MSI": {
+            "type": "String",
+            "value": "[reference(variables('uniquestorageName'),'2019-04-01', 'Full').identity.PrincipalId]"
         }
     }
 }
