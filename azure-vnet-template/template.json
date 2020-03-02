@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Name": {
+            "type": "String"
+        },
+        "subnetName": {
+            "type": "String"
+        },
+        "subnetPrefix": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "suffix": "[toLower(uniqueString(resourceGroup().id, resourceGroup().location))]",
+        "location": "[resourceGroup().location]",
+        "vnetAddrPrefix": "100.10.0.0/16",
+        "vnetName": "[substring(concat(parameters('Name'), variables('suffix')),0,20)]",
+        "subnetname": "[substring(concat(parameters('subnetName'),variables('suffix')),0,20)]"
+    },
+    "functions": [],
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "name": "[variables('vnetName')]",
+            "location": "[variables('location')]",
+            "tags": {
+                "displayName": "[variables('vnetName')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnetAddrPrefix')]"
+                    ]
+                },
+                "enableDdosProtection": false,
+                "enableVmProtection": false,
+                "subnets": [
+                    {
+                        "name": "[variables('subnetname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Web"
+                                },
+                                {
+                                    "service": "Microsoft.KeyVault"
+                                },
+                                {
+                                    "service": "Microsoft.Storage"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
