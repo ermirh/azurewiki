@@ -17,6 +17,18 @@
         "virtualMachineSize": {
             "type": "string"
         },
+        "windowsOSVersion": {
+            "type": "string",
+            "allowedValues": [
+                "2012-Datacenter",
+                "2012-R2-Datacenter",
+                "2016-Datacenter",
+                "2019-Datacenter"
+            ],
+            "metadata": {
+                "description": "The Windows version for the VM."
+            }
+        },
         "adminUsername": {
             "type": "string"
         },
@@ -92,7 +104,7 @@
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "2019-Datacenter",
+                        "sku": "[parameters('windowsOSVersion')]",
                         "version": "latest"
                     }
                 },
