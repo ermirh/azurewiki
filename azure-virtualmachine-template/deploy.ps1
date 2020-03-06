@@ -14,8 +14,8 @@ $adminUser = $credentials.UserName
 $adminPassword = $credentials.Password
 
 #specify local path of the template & parameters file
-$templateParam = "C:\Users\ehoxhaj\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.parameters.json"
-$template = "C:\Users\ehoxhaj\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.json"
+$templateParam = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.parameters.json"
+$template = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.json"
 
 #test the deployment - empty output is ok, working
 Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template -adminUsername $adminUser -adminPassword $adminPassword
