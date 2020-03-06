@@ -39,6 +39,7 @@
     "variables": {
         "suffix": "[toLower(uniqueString(resourceGroup().id,resourceGroup().location))]",
         "VMname": "[toLower(concat(parameters('virtualMachineName'),variables('suffix')))]",
+		"storageAccountName": "diagstorage45936",
         "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
         "vnetId": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('virtualNetwork'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
@@ -100,7 +101,7 @@
                         "managedDisk": {
                             "storageAccountType": "StandardSSD_LRS"
                         }
-                    },
+                    },   
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
@@ -114,6 +115,12 @@
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
                         }
                     ]
+                },
+				"diagnosticsProfile": {
+                   "bootDiagnostics": {
+                      "enabled": true,
+                      "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2019-04-01', 'Full').primaryEndpoints.blob)]"
+                   }
                 },
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineName')]",
