@@ -1,10 +1,10 @@
 Connect-AzAccount
 
 #select your subscription where going to provision resources
-Get-AzSubscription -SubscriptionName '<sub_name>' | Select-AzSubscription
+Get-AzSubscription -SubscriptionName '<Subscription_Name>' | Select-AzSubscription
 
 #create a variable for Resource Group (Get-AzResourceGroup)
-$resourceGroup = ""
+$resourceGroup = "<Resource_Group_Name>"
 
 #enter username & password for VM credentials
 $credentials = Get-Credential
@@ -14,8 +14,8 @@ $adminUser = $credentials.UserName
 $adminPassword = $credentials.Password
 
 #specify local path of the template & parameters file
-$templateParam = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.parameters.json"
-$template = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-virtualmachine-template\template.json"
+$templateParam = ".\azure-virtualmachine-template\template.parameters.json"
+$template = ".\azure-virtualmachine-template\template.json"
 
 #test the deployment - empty output is ok, working
 Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template -adminUsername $adminUser -adminPassword $adminPassword

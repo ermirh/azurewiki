@@ -1,11 +1,11 @@
 Connect-AzAccount
 
-Get-AzSubscription -SubscriptionName '<sub_name>' | Select-AzSubscription
+Get-AzSubscription -SubscriptionName '<Subscription_Name>' | Select-AzSubscription
 
 #create new resource group - or use already an existing one (Get-AzResourceGroup)#
-$resourceGroup = "azurewiki-rg-001"
-$templateParam = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-storageaccount-template\template.parameters.json"
-$template = "C:\Users\***\Desktop\Box Sync\azurewiki\azure-storageaccount-template\template.json"
+$resourceGroup = "<Resource_Group_Name>"
+$templateParam = ".\azure-storageaccount-template\template.parameters.json"
+$template = ".\azure-storageaccount-template\template.json"
 
 #test the deployment - empty output is ok, working#
 Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template

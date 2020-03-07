@@ -2,10 +2,10 @@
 Connect-AzAccount
 
 # select the subscription to work in, deploying resources
-Get-AzSubscription -SubscriptionName "Azure subscription 1" | Select-AzSubscription
+Get-AzSubscription -SubscriptionName "<Subscription_Name>" | Select-AzSubscription
 
 #define variables for the ResourceGroup, Key Vault and Storage Account in your environment 
-$rg = Get-AzResourceGroup -Name "cmk-demo-rg001"
+$rg = Get-AzResourceGroup -Name "<Resource_Group_Name>"
 $vm = Get-AzVM -Name "win-cmk-demo01" -ResourceGroupName $rg.ResourceGroupName
 $keyvault = Get-AzKeyVault -VaultName "cmk-vault060320-demo" -ResourceGroupName $rg.ResourceGroupName
 

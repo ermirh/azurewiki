@@ -1,10 +1,10 @@
 Connect-AzAccount
 
 #select your subscription where going to provision resources
-Get-AzSubscription -SubscriptionName 'Azure subscription 1' | Select-AzSubscription
+Get-AzSubscription -SubscriptionName '<Subscription_Name>' | Select-AzSubscription
 
 #create a variable for Resource Group (Get-AzResourceGroup)
-$resourceGroup = "cmk-demo-rg001"
+$resourceGroup = "<Resource_Group_Name>"
 
 #enter username & password for SQL server credentials
 $credentials = Get-Credential
@@ -14,11 +14,11 @@ $sqlUser = $credentials.UserName
 $sqlUserPassword = $credentials.Password
 
 #specify local path of the template & parameters file
-$templateParam = "C:\Users\ehoxhaj\Desktop\Box Sync\azurewiki\azure-sql-template\template.parameters.json"
-$template = "C:\Users\ehoxhaj\Desktop\Box Sync\azurewiki\azure-sql-template\template.json"
+$templateParam = ".\azure-sql-template\template.parameters.json"
+$template = ".\azure-sql-template\template.json"
 
 #test the deployment - empty output is ok, working
 Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template -sqlServerAdministrator $sqlUser -sqlServerAdministratorPwd $sqlUserPassword
 
-#create an ARM deployment
+#run the ARM deployment
 New-AzResourceGroupDeployment -Name "deploy-sql-070320" -ResourceGroupName $resourceGroup -TemplateFile $template -TemplateParameterFile $templateParam -sqlServerAdministrator $sqlUser -sqlServerAdministratorPwd $sqlUserPassword -Force
