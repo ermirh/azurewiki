@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Sql Server Name": {
+           "type": "string",
+           "metadata": {
+                "description": "Enter SQL Server instance name to host this Database."
+            }
+        },
+        "Database Name": {
+           "type": "string",
+           "metadata": {
+                "description": "Enter the name of database to be created."
+            }
+        },
+        "Sku Name": {
+           "type": "string",
+           "metadata": {
+                "description": "The name of the SKU, typically, a letter + Number code. Check via cmdlet: `Get-AzSqlServerServiceObjective -Location 'westeurope'` ."
+            }
+        },
+        "Sku Tier": {
+           "type": "string",
+           "metadata": {
+                "description": "The tier or edition of the particular SKU, based on name choosen."
+            }
+        },
+        "Sku Size": {
+           "type": "string",
+           "metadata": {
+                "description": "Size of the particular SKU"
+            }
+        }
+    },
+    "variables": {
+        "suffix": "[toLower(uniqueString(resourceGroup().id, resourceGroup().location))]",
+        "dbname": "[toLower(concat(parameters('Database Name'),variables('suffix')))]",
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('Sql Server Name'),'/',variables('dbname'))]",
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2017-10-01-preview",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('Sku Name')]",
+                "tier": "[parameters('Sku Tier')]",
+                "size": "[parameters('Sku Size')]",
+                "family": "Gen5",
+                "capacity": 4
+            },
+            "tags": {
+                "Name": "[variables('dbname')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('Sql Server Name'))]"
+            ],
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "elasticPoolId": "",
+                "createMode": "Default",
+                "maxSizeBytes": 1,
+                "licenseType": "BasePrice"
+            }
+        }
+    ],
+    "outputs": {
+        "Database Name": {
+            "type": "string",
+            "value": "[variables('dbname')]"
+        }
+    }
+}

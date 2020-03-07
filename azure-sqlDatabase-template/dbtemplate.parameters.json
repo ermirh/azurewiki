@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Sql Server Name": {
+            "value": "sql477ehzjthjdhy"
+        },
+        "Database Name": {
+            "value": "dbtest1"
+        },
+        "Sku Name": {
+            "value": "GP_Gen5_4"
+        },
+        "Sku Tier": {
+            "value": "GeneralPurpose"
+        },
+        "Sku Size": {
+            "value": "value"
+        }
+    }
+}

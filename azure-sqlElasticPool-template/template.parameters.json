@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName": {
+            "value": "sql477ehzjthjdhy"
+        },
+        "serverLocation": {
+            "value": "northeurope"
+        },
+        "elasticPoolName": {
+            "value": "epdemo74nn5g"
+        },
+        "skuName": {
+            "value": "StandardPool"
+        },
+        "tier": {
+            "value": "Standard"
+        },
+        "poolLimit": {
+            "value": "100"
+        },
+        "poolSize": {
+            "value": 536870912000
+        },
+        "perDatabasePerformanceMin": {
+            "value": "0"
+        },
+        "perDatabasePerformanceMax": {
+            "value": "100"
+        },
+        "zoneRedundant": {
+            "value": false
+        },
+        "licenseType": {
+            "value": "LicenseIncluded"
+        },
+        "elasticPoolTags": {
+            "value": {
+                "Type": "ElasticPool"
+            }
+        }
+    }
+}
