@@ -13,6 +13,9 @@
       },
       "keyName": {
         "value": "sqlserverkey"
+      },
+      "firewallIpRule": {
+        "value": "1.1.1.1"
       }
     }
   }

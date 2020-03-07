@@ -25,6 +25,12 @@
             "metadata": {
                 "description": "Key name in the key vault to use as encryption protector"
             }
+        },
+        "firewallIpRule": {
+            "type": "string",
+            "metadata" : {
+                "description": "Enter IP or subnet to allow access on SQL server."
+            }
         }
     },
     "variables": {
@@ -122,8 +128,8 @@
                     "location": "[variables('location')]",
                     "name": "[concat(variables('sqlServerName'), '/current')]",
                     "properties": {
-                        "startIpAddress": "94.190.203.161",
-                        "endIpAddress": "94.190.203.161"
+                        "startIpAddress": "[parameters('firewallIpRule')]",
+                        "endIpAddress": "[parameters('firewallIpRule')]"
                     }
         }
     ],
