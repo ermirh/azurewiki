@@ -1,0 +1,136 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sqlServerAdministrator": {
+            "type": "String",
+            "metadata": {
+                "description": "Azure SQL server administrator name"
+            }
+        },
+        "sqlServerAdministratorPwd": {
+            "type": "SecureString",
+            "metadata": {
+                "description": "Azure SQL server administrator password"
+            }
+        },
+        "keyVaultName": {
+            "type": "String",
+            "metadata": {
+                "description": "Key vault name where the key to use is stored"
+            }
+        },
+        "keyName": {
+            "type": "String",
+            "metadata": {
+                "description": "Key name in the key vault to use as encryption protector"
+            }
+        }
+    },
+    "variables": {
+        "sqlServerName": "[toLower(concat('sql', uniqueString(resourceGroup().id, resourceGroup().location)))]",
+        "sqlServerKeyName": "[concat(parameters('keyVaultName'), '_', parameters('keyName'), '_', variables('keyVersion'))]",
+        "location": "[resourceGroup().location]",
+        "keyVaultResourceGroupName": "[resourceGroup().name]",
+        "keyVersion": "ab7beacf8d744111865694e054612f9a"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[variables('sqlServerName')]",
+            "location": "[variables('location')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('sqlServerAdministrator')]",
+                "administratorLoginPassword": "[parameters('sqlServerAdministratorPwd')]",
+                "version": "12.0"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-05-01",
+            "name": "addAccessPolicy",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                            "name": "[concat(parameters('keyVaultName'), '/add')]",
+                            "apiVersion": "2018-02-14-preview",
+                            "properties": {
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[subscription().tenantId]",
+                                        "objectId": "[reference(resourceId('Microsoft.Sql/servers/', variables('sqlServerName')), '2017-03-01-preview', 'Full').identity.principalId]",
+                                        "permissions": {
+                                            "keys": [
+                                                "get",
+                                                "wrapKey",
+                                                "unwrapKey"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "resourceGroup": "[variables('keyVaultResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(variables('sqlServerName'), '/', variables('sqlServerKeyName'))]",
+            "dependsOn": [
+                "addAccessPolicy",
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+            ],
+            "properties": {
+                "serverKeyType": "AzureKeyVault",
+                "uri": "[concat(reference(resourceId(variables('keyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults/', parameters('keyVaultName')), '2018-02-14-preview', 'Full').properties.vaultUri, 'keys/', parameters('keyName'), '/', variables('keyVersion'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(variables('sqlServerName'), '/current')]",
+            "dependsOn": [
+                "[concat('Microsoft.SQL/servers/', variables('sqlServerName'),'/keys/', variables('sqlServerKeyName'))]"
+            ],
+            "kind": "azurekeyvault",
+            "properties": {
+                "serverKeyName": "[variables('sqlServerKeyName')]",
+                "serverKeyType": "AzureKeyVault"
+            }
+        },
+        {
+                    "type": "Microsoft.Sql/servers/firewallRules",
+                    "apiVersion": "2015-05-01-preview",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+                    ],
+                    "location": "[variables('location')]",
+                    "name": "[concat(variables('sqlServerName'), '/current')]",
+                    "properties": {
+                        "startIpAddress": "94.190.203.161",
+                        "endIpAddress": "94.190.203.161"
+                    }
+        }
+    ],
+    "outputs": {
+        "SqlServerName": {
+            "type": "string",
+            "value": "[variables('sqlServerName')]"
+        }
+    }
+}

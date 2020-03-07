@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "sqlServerAdministrator": {
+        "value": null
+      },
+      "sqlServerAdministratorPwd": {
+        "value": null
+      },
+      "keyVaultName": {
+        "value": "cmk-vault060320-demo"
+      },
+      "keyName": {
+        "value": "sqlserverkey"
+      }
+    }
+  }
