@@ -1,4 +1,4 @@
-PS Azure:\> Get-AzSqlServerServiceObjective -Location 'westeurope'
+PS Azure:\> Get-AzSqlServerServiceObjective -Location 'northeurope'
 
 ServiceObjectiveName SkuName       Edition          Family Capacity CapacityUnit Enabled
 -------------------- -------       -------          ------ -------- ------------ -------
