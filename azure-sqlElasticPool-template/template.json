@@ -1,69 +1,83 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "serverName": {
-            "type": "string"
-        },
-        "serverLocation": {
-            "type": "string"
+        "SqlServerName": {
+            "type": "String"
         },
         "elasticPoolName": {
-            "type": "string"
+            "type": "String"
         },
         "skuName": {
-            "type": "string"
+            "type": "String",
+            "metadata": {
+                "description": "Enter Sku Name for EP. Use cmdlet to see all available your region: `az sql elastic-pool list-editions -l northeurope -o table` ."
+            }
         },
-        "tier": {
-            "type": "string"
+        "editionPool": {
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium",
+                "GeneralPurpose",
+                "BusinessCritical"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "The Elastic Pool DTU."
+            }
         },
-        "poolLimit": {
-            "type": "string"
+        "capacityDTU": {
+            "type": "String"
         },
-        "poolSize": {
-            "type": "int"
+        "PoolDBMaxSize": {
+            "type": "Int",
+            "metadata": {
+                "description": "The storage limit for the database elastic pool in bytes."
+            }
         },
-        "perDatabasePerformanceMin": {
-            "type": "string"
-        },
-        "perDatabasePerformanceMax": {
-            "type": "string"
-        },
-        "zoneRedundant": {
-            "type": "bool",
-            "defaultValue": false
+        "poolDtuMax": {
+            "type": "String"
         },
         "licenseType": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "elasticPoolTags": {
-            "type": "object",
-            "defaultValue": {}
+            "allowedValues": [
+                "LicenseIncluded",
+                "BasePrice"
+            ],
+            "type": "String"
         }
     },
-    "variables": {},
+    "variables": {
+        "suffix": "[toLower(uniqueString(resourceGroup().location, resourceGroup().id))]",
+        "elasticPoolname": "[toLower(concat(parameters('elasticPoolName'),variables('suffix')))]",
+        "location": "[resourceGroup().location]"
+    },
     "resources": [
         {
-            "name": "[concat(parameters('serverName'), '/', parameters('elasticPoolName'))]",
-            "tags": "[parameters('elasticPoolTags')]",
-            "location": "[parameters('serverLocation')]",
             "type": "Microsoft.Sql/servers/elasticpools",
             "apiVersion": "2017-10-01-preview",
+            "name": "[concat(parameters('SqlServerName'), '/', variables('elasticPoolname'))]",
+            "location": "[variables('location')]",
+            "tags": {},
             "sku": {
                 "name": "[parameters('skuName')]",
-                "tier": "[parameters('tier')]",
-                "capacity": "[parameters('poolLimit')]"
+                "tier": "[parameters('editionPool')]",
+                "capacity": "[parameters('capacityDTU')]"
             },
             "properties": {
                 "perDatabaseSettings": {
-                    "minCapacity": "[parameters('perDatabasePerformanceMin')]",
-                    "maxCapacity": "[parameters('perDatabasePerformanceMax')]"
+                    "minCapacity": 0,
+                    "maxCapacity": "[parameters('poolDtuMax')]"
                 },
-                "maxSizeBytes": "[parameters('poolSize')]",
-                "zoneRedundant": "[parameters('zoneRedundant')]",
+                "maxSizeBytes": "[parameters('PoolDBMaxSize')]",
                 "licenseType": "[parameters('licenseType')]"
             }
         }
-    ]
+    ],
+    "outputs": {
+        "ElasticPoolName": {
+           "type": "string",
+           "value": "[variables('elasticPoolname')]"
+        }
+    }
 }

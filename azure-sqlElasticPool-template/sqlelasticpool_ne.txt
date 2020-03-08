@@ -1,0 +1,94 @@
+e3r@Azure:~$ az sql elastic-pool list-editions -l northeurope -o table
+Sku           Edition           Family    Capacity    Unit    Available
+------------  ----------------  --------  ----------  ------  -----------
+StandardPool  Standard                    50          DTU     True
+StandardPool  Standard                    100         DTU     True
+StandardPool  Standard                    200         DTU     False
+StandardPool  Standard                    300         DTU     False
+StandardPool  Standard                    400         DTU     False
+StandardPool  Standard                    800         DTU     False
+StandardPool  Standard                    1200        DTU     False
+StandardPool  Standard                    1600        DTU     False
+StandardPool  Standard                    2000        DTU     False
+StandardPool  Standard                    2500        DTU     False
+StandardPool  Standard                    3000        DTU     False
+PremiumPool   Premium                     125         DTU     False
+PremiumPool   Premium                     250         DTU     False
+PremiumPool   Premium                     500         DTU     False
+PremiumPool   Premium                     1000        DTU     False
+PremiumPool   Premium                     1500        DTU     False
+PremiumPool   Premium                     2000        DTU     False
+PremiumPool   Premium                     2500        DTU     False
+PremiumPool   Premium                     3000        DTU     False
+PremiumPool   Premium                     3500        DTU     False
+PremiumPool   Premium                     4000        DTU     False
+BasicPool     Basic                       50          DTU     True
+BasicPool     Basic                       100         DTU     True
+BasicPool     Basic                       200         DTU     False
+BasicPool     Basic                       300         DTU     False
+BasicPool     Basic                       400         DTU     False
+BasicPool     Basic                       800         DTU     False
+BasicPool     Basic                       1200        DTU     False
+BasicPool     Basic                       1600        DTU     False
+GP_Gen4       GeneralPurpose    Gen4      1           VCores  True
+GP_Gen4       GeneralPurpose    Gen4      2           VCores  False
+GP_Gen5       GeneralPurpose    Gen5      2           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      3           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      4           VCores  False
+GP_Gen5       GeneralPurpose    Gen5      4           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      5           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      6           VCores  False
+GP_Gen5       GeneralPurpose    Gen5      6           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      7           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      8           VCores  False
+GP_Gen5       GeneralPurpose    Gen5      8           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      9           VCores  False
+GP_Gen4       GeneralPurpose    Gen4      10          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      10          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      12          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      14          VCores  False
+GP_Gen4       GeneralPurpose    Gen4      16          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      16          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      18          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      20          VCores  False
+GP_Gen4       GeneralPurpose    Gen4      24          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      24          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      32          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      40          VCores  False
+GP_Fsv2       GeneralPurpose    Fsv2      72          VCores  False
+GP_Gen5       GeneralPurpose    Gen5      80          VCores  False
+BC_Gen4       BusinessCritical  Gen4      2           VCores  False
+BC_Gen4       BusinessCritical  Gen4      3           VCores  False
+BC_Gen4       BusinessCritical  Gen4      4           VCores  False
+BC_Gen5       BusinessCritical  Gen5      4           VCores  False
+BC_Gen4       BusinessCritical  Gen4      5           VCores  False
+BC_Gen4       BusinessCritical  Gen4      6           VCores  False
+BC_Gen5       BusinessCritical  Gen5      6           VCores  False
+BC_Gen4       BusinessCritical  Gen4      7           VCores  False
+BC_Gen4       BusinessCritical  Gen4      8           VCores  False
+BC_Gen5       BusinessCritical  Gen5      8           VCores  False
+BC_M          BusinessCritical  M         8           VCores  False
+BC_Gen4       BusinessCritical  Gen4      9           VCores  False
+BC_Gen4       BusinessCritical  Gen4      10          VCores  False
+BC_Gen5       BusinessCritical  Gen5      10          VCores  False
+BC_M          BusinessCritical  M         10          VCores  False
+BC_Gen5       BusinessCritical  Gen5      12          VCores  False
+BC_M          BusinessCritical  M         12          VCores  False
+BC_Gen5       BusinessCritical  Gen5      14          VCores  False
+BC_M          BusinessCritical  M         14          VCores  False
+BC_Gen4       BusinessCritical  Gen4      16          VCores  False
+BC_Gen5       BusinessCritical  Gen5      16          VCores  False
+BC_M          BusinessCritical  M         16          VCores  False
+BC_Gen5       BusinessCritical  Gen5      18          VCores  False
+BC_M          BusinessCritical  M         18          VCores  False
+BC_Gen5       BusinessCritical  Gen5      20          VCores  False
+BC_M          BusinessCritical  M         20          VCores  False
+BC_Gen4       BusinessCritical  Gen4      24          VCores  False
+BC_Gen5       BusinessCritical  Gen5      24          VCores  False
+BC_M          BusinessCritical  M         24          VCores  False
+BC_Gen5       BusinessCritical  Gen5      32          VCores  False
+BC_M          BusinessCritical  M         32          VCores  False
+BC_Gen5       BusinessCritical  Gen5      40          VCores  False
+BC_M          BusinessCritical  M         64          VCores  False
+BC_Gen5       BusinessCritical  Gen5      80          VCores  False
+BC_M          BusinessCritical  M         128         VCores  False
