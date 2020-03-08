@@ -1,4 +1,5 @@
-e3r@Azure:~$ az sql elastic-pool list-editions -l northeurope -o table
+~$ az sql elastic-pool list-editions -l northeurope -o table
+
 Sku           Edition           Family    Capacity    Unit    Available
 ------------  ----------------  --------  ----------  ------  -----------
 StandardPool  Standard                    50          DTU     True

@@ -4,7 +4,7 @@ Connect-AzAccount
 Get-AzSubscription -SubscriptionName '<Subscription_Name>' | Select-AzSubscription
 
 #create a variable for Resource Group (Get-AzResourceGroup)
-$resourceGroup = "cmk-demo-rg001"
+$resourceGroup = "<Resource_Group>"
 
 #specify local path of the template & parameters file
 $templateParam = ".\template.parameters.json"
