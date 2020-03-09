@@ -1,0 +1,6 @@
+# Azure SQL ElasticPool Database
+
+Creating new Database in an existing SQL Elastic Pool. Learn more for EP : https://docs.microsoft.com/en-us/azure/sql-database/sql-database-elastic-pool
+
+For more information on api resource see official docs: https://docs.microsoft.com/en-us/azure/templates/microsoft.sql/2017-10-01-preview/servers/databases
+
