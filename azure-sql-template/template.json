@@ -8,7 +8,7 @@
                 "description": "Azure SQL server administrator name"
             }
         },
-        "sqlServerAdministratorPwd": {
+        "sqlServerAdministratorPassword": {
             "type": "SecureString",
             "metadata": {
                 "description": "Azure SQL server administrator password"
@@ -51,7 +51,7 @@
             },
             "properties": {
                 "administratorLogin": "[parameters('sqlServerAdministrator')]",
-                "administratorLoginPassword": "[parameters('sqlServerAdministratorPwd')]",
+                "administratorLoginPassword": "[parameters('sqlServerAdministratorPassword')]",
                 "version": "12.0"
             }
         },

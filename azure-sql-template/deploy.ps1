@@ -18,7 +18,7 @@ $templateParam = ".\azure-sql-template\template.parameters.json"
 $template = ".\azure-sql-template\template.json"
 
 #test the deployment - empty output is ok, working
-Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template -sqlServerAdministrator $sqlUser -sqlServerAdministratorPwd $sqlUserPassword
+Test-AzResourceGroupDeployment -ResourceGroupName $resourceGroup -TemplateParameterFile $templateParam -TemplateFile $template -sqlServerAdministrator $sqlUser -sqlServerAdministratorPassword $sqlUserPassword
 
 #run the ARM deployment
-New-AzResourceGroupDeployment -Name "deploy-sql-070320" -ResourceGroupName $resourceGroup -TemplateFile $template -TemplateParameterFile $templateParam -sqlServerAdministrator $sqlUser -sqlServerAdministratorPwd $sqlUserPassword -Force
+New-AzResourceGroupDeployment -Name "deploy-sql-070320" -ResourceGroupName $resourceGroup -TemplateFile $template -TemplateParameterFile $templateParam -sqlServerAdministrator $sqlUser -sqlServerAdministratorPassword $sqlUserPassword -Force

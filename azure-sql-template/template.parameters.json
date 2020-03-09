@@ -5,14 +5,14 @@
       "sqlServerAdministrator": {
         "value": null
       },
-      "sqlServerAdministratorPwd": {
+      "sqlServerAdministratorPassword": {
         "value": null
       },
       "keyVaultName": {
-        "value": "cmk-vault060320-demo"
+        "value": ""
       },
       "keyName": {
-        "value": "sqlserverkey"
+        "value": ""
       },
       "firewallIpRule": {
         "value": "1.1.1.1"
