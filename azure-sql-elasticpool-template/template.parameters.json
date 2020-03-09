@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sqlServerName": {
-            "value": "sql477ehzjthjdhy"
+            "value": ""
         },
         "elasticPoolName": {
-            "value": "sqlpool"
+            "value": ""
         },
         "skuName": {
             "value": "StandardPool"
