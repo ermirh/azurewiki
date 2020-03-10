@@ -1,0 +1,125 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "AppServicePlan": {
+            "type": "string"
+        },
+        "environmentSlots": {
+            "type": "string",
+            "defaultValue": [
+                "Dev"
+            ]
+        },
+        "appName": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service name to create."
+            }
+        },
+        "skuCode": {
+            "type": "string",
+            "metadata": {
+                "description": "Specify the name for the Service Plan SKU."
+            }
+        },
+        "skuTier": {
+            "type": "string",
+            "metadata": {
+                "description": "Service tier for the Service Plan resource SKU."
+            },
+            "allowedValues": [
+                "Free",
+                "Shared",
+                "Basic",
+                "Standard",
+                "Premium"
+            ]
+        },
+        "workerSize": {
+            "type": "string",
+            "allowedValues": [
+                "Small",
+                "Medium",
+                "Large"
+            ]
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "suffix": "[toLower(uniqueString(resourceGroup().name, resourceGroup().id))]",
+        "appserviceplanname": "[toLower(concat(parameters('AppServicePlan'),variables('suffix')))]",
+        "sitename": "[toLower(concat(parameters('appName'),variables('suffix')))]",
+        "capacityWorker": {
+            "Small": {
+                "name": 0
+            },
+            "Medium": {
+                "name": 1
+            },
+            "Large": {
+                "name": 2
+            }
+        }
+    },
+    "resources": [
+        {
+            "name": "[variables('appserviceplanname')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "location": "[variables('location')]",
+            "kind": "linux",
+            "sku": {
+                "name": "[parameters('skuCode')]",
+                "tier": "[parameters('skuTier')]",
+                "capacity": "[variables('capacityWorker')[parameters('workerSize').name]]"
+            },
+            "tags": {
+                "Name": "[variables('appserviceplanname')]"
+            },
+            "properties": {
+            }
+        },
+        {
+            "name": "[concat(variables('appserviceplanname'),'/',variables('sitename'))]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "kind": "app",
+            "location": "[variables('location')]",
+            "tags": {
+                "Name": "[variables('sitename')]"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appserviceplanname'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appserviceplanname'))]",
+                "enabled": true,
+                "redundancyMode": "Failover"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots",
+            "name": "[concat(variables('sitename'),'/',parameters('environmentSlots'))]",
+            "apiVersion": "2018-02-01",
+            "kind": "app",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites',variables('sitename'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms',variables('appserviceplanname'))]",
+                "enabled": true
+            }
+        }
+    ],
+    "outputs": {
+        "AppServiceName": {
+            "type": "string",
+            "value": "[variables('sitename')]"
+        }
+    }
+}
