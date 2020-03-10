@@ -9,22 +9,22 @@
             "value": ""
         },
         "skuName": {
-            "value": "StandardPool"
+            "value": ""
         },
         "editionPool": {
-            "value": "Standard"
+            "value": ""
         },
         "capacityDTU": {
-            "value": "100"
+            "value": ""
         },
         "PoolDBMaxSize": {
-            "value": 107374182400
+            "value": ""
         },
         "poolDtuMax": {
-            "value": "100"
+            "value": ""
         },
         "licenseType": {
-            "value": "BasePrice"
+            "value": ""
         }
     }
 }

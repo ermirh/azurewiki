@@ -3,16 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
       "storageAccountTypes": {
-          "value": "Zone Redundant Storage (3 different AZs)"
+          "value": ""
       },
       "kind": {
-          "value": "StorageV2"
+          "value": ""
       },
       "accessTier": {
-          "value": "Hot"
+          "value": ""
       },
       "containerName": {
-          "value": "reports"
+          "value": ""
       }
   }
 }

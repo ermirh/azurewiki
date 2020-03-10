@@ -5,6 +5,9 @@
         "Name": {
             "type": "String"
         },
+        "vnetPrefix": {
+            "type": "string"
+        },
         "subnetName": {
             "type": "String"
         },
@@ -15,7 +18,7 @@
     "variables": {
         "suffix": "[toLower(uniqueString(resourceGroup().id, resourceGroup().location))]",
         "location": "[resourceGroup().location]",
-        "vnetAddrPrefix": "100.10.0.0/16",
+        "vnetAddrPrefix": "[parameters('vnetPrefix')]",
         "vnetName": "[substring(concat(parameters('Name'), variables('suffix')),0,20)]",
         "subnetname": "[substring(concat(parameters('subnetName'),variables('suffix')),0,20)]"
     },
@@ -59,5 +62,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "VirtualNetworkName": {
+            "type": "string",
+            "value": "[variables('vnetName')]"
+        }
+    }
 }

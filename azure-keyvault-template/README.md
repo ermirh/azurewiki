@@ -2,7 +2,7 @@
 
 Creating an ARM template for Key Vault resouce provisioning and a secret name/value on it. Also adding an access policy for permissions on keys, secrets for this Vault.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fermirh%2Fazurewiki%2Fmaster%2Fazure-keyvault-template%2Ftemplate.json)
+[![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
 
 
 Reference  to the resource provider Key Vault - https://docs.microsoft.com/en-us/azure/templates/microsoft.keyvault/2018-02-14/vaults

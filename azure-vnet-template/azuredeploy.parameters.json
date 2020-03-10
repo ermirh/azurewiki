@@ -3,13 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "Name": {
-      "value": "azwikivnet"
+      "value": ""
+    },
+    "vnetPrefix": {
+      "value": ""
     },
     "subnetName": {
-      "value": "subnet1az"
+      "value": ""
     },
     "subnetPrefix": {
-      "value": "100.10.0.0/24"
+      "value": ""
     }
   }
 }

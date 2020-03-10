@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "SqlServerName": {
-            "value": "sql477ehzjthjdhy"
+            "value": ""
         },
         "DatabaseName": {
-            "value": "dbtest"
+            "value": ""
         },
         "ElasticPoolName": {
-            "value": "sqlpool477ehzjthjdhy"
+            "value": ""
         }
     }
 }

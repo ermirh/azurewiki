@@ -20,16 +20,16 @@
             ]
         },
         "subnetName": {
-            "value": "subnet1az6bcgob6qkga"
+            "value": ""
         },
         "virtualNetwork": {
-            "value": "azwikivnet6bcgob6qkg"
+            "value": ""
         },
         "virtualMachineName": {
-            "value": "windowsdemo001"
+            "value": ""
         },
         "virtualMachineSize": {
-            "value": "Standard_D4_v3"
+            "value": ""
         },
         "adminUsername": {
             "value": null
