@@ -32,7 +32,7 @@
             }
         },
         "skuTier": {
-            "defaultValue": "Standard",
+            "defaultValue": "Basic",
             "allowedValues": [
                 "Free",
                 "Shared",
