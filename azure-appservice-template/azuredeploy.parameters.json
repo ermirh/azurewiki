@@ -10,10 +10,9 @@
       },
       "environments": {
           "value": [
-              "Dev",
-              "Test",
-              "UAT",
-              "Preview"
+              "",
+              "",
+              ""
           ]
       },
       "skuName": {

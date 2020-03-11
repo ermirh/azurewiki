@@ -14,7 +14,6 @@
         "environments": {
             "defaultValue": [
                 "Dev",
-                "Test",
                 "UAT",
                 "Preview"
             ],
@@ -107,9 +106,19 @@
                 "enabled": true
             },
             "copy": {
-                "name": "webPortalSlot",
+                "name": "webappSlot",
                 "count": "[length(parameters('environments'))]"
             }
         }
-    ]
+    ],
+    "outputs": {
+        "AppServiceIdentity": {
+            "type": "string",
+            "value": "[reference(variables('webappName'),'2016-08-01','Full').identity.PrincipalId]"
+        },
+        "AppServiceName": {
+            "type": "string",
+            "value": "[reference(variables('webappName'), '2016-08-01', 'Full').DefaultHostName]"
+        }
+    }
 }
