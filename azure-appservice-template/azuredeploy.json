@@ -2,124 +2,114 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "AppServicePlan": {
-            "type": "string"
-        },
-        "environmentSlots": {
-            "type": "string",
-            "defaultValue": [
-                "Dev"
-            ]
-        },
-        "appName": {
-            "type": "string",
+        "appServicePlan": {
+            "type": "String",
             "metadata": {
-                "description": "App Service name to create."
+                "description": "Name of the resource"
             }
         },
-        "skuCode": {
-            "type": "string",
+        "WebAppName": {
+            "type": "String"
+        },
+        "environments": {
+            "defaultValue": [
+                "Dev",
+                "Test",
+                "UAT",
+                "Preview"
+            ],
+            "maxLength": 15,
+            "type": "Array",
+            "metadata": {
+                "description": "Array with the names for the environment slots"
+            }
+        },
+        "skuName": {
+            "defaultValue": "S1",
+            "type": "String",
             "metadata": {
                 "description": "Specify the name for the Service Plan SKU."
             }
         },
         "skuTier": {
-            "type": "string",
-            "metadata": {
-                "description": "Service tier for the Service Plan resource SKU."
-            },
+            "defaultValue": "Standard",
             "allowedValues": [
                 "Free",
                 "Shared",
                 "Basic",
                 "Standard",
                 "Premium"
-            ]
-        },
-        "workerSize": {
-            "type": "string",
-            "allowedValues": [
-                "Small",
-                "Medium",
-                "Large"
-            ]
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Service tier for the Service Plan resource SKU."
+            }
         }
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "suffix": "[toLower(uniqueString(resourceGroup().name, resourceGroup().id))]",
-        "appserviceplanname": "[toLower(concat(parameters('AppServicePlan'),variables('suffix')))]",
-        "sitename": "[toLower(concat(parameters('appName'),variables('suffix')))]",
-        "capacityWorker": {
-            "Small": {
-                "name": 0
-            },
-            "Medium": {
-                "name": 1
-            },
-            "Large": {
-                "name": 2
-            }
-        }
+        "suffix": "[toLower(uniqueString(resourceGroup().location, resourceGroup().id))]",
+        "appservicehostingplan": "[substring(concat(parameters('appServicePlan'),variables('suffix')),0,15)]",
+        "webappName": "[substring(concat(parameters('WebAppName'),variables('suffix')),0,15)]"
     },
     "resources": [
         {
-            "name": "[variables('appserviceplanname')]",
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2016-09-01",
+            "name": "[variables('appservicehostingplan')]",
             "location": "[variables('location')]",
-            "kind": "linux",
+            "dependsOn": [],
+            "tags": {},
             "sku": {
-                "name": "[parameters('skuCode')]",
-                "tier": "[parameters('skuTier')]",
-                "capacity": "[variables('capacityWorker')[parameters('workerSize').name]]"
+                "name": "[parameters('skuName')]",
+                "tier": "[parameters('skuTier')]"
             },
-            "tags": {
-                "Name": "[variables('appserviceplanname')]"
-            },
-            "properties": {
-            }
+            "kind": "app",
+            "properties": {}
         },
         {
-            "name": "[concat(variables('appserviceplanname'),'/',variables('sitename'))]",
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-02-01",
-            "kind": "app",
+            "apiVersion": "2016-08-01",
+            "name": "[variables('webappName')]",
             "location": "[variables('location')]",
-            "tags": {
-                "Name": "[variables('sitename')]"
-            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appservicehostingplan'))]"
+            ],
+            "tags": {},
             "identity": {
                 "type": "SystemAssigned"
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('appserviceplanname'))]"
-            ],
+            "kind": "app",
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appserviceplanname'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appservicehostingplan'))]",
                 "enabled": true,
-                "redundancyMode": "Failover"
+                "siteConfig": {
+                    "appSettings": [],
+                    "numberOfWorkers": 2
+                },
+                "httpsOnly": false
             }
         },
         {
             "type": "Microsoft.Web/sites/slots",
-            "name": "[concat(variables('sitename'),'/',parameters('environmentSlots'))]",
-            "apiVersion": "2018-02-01",
-            "kind": "app",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(variables('webappName'), '/', parameters('environments')[copyIndex()])]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites',variables('sitename'))]"
+                "[resourceId('Microsoft.Web/Sites', variables('webappName'))]"
             ],
+            "tags": {
+                "displayName": "WebAppSlots"
+            },
+            "kind": "app",
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms',variables('appserviceplanname'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appservicehostingplan'))]",
                 "enabled": true
+            },
+            "copy": {
+                "name": "webPortalSlot",
+                "count": "[length(parameters('environments'))]"
             }
         }
-    ],
-    "outputs": {
-        "AppServiceName": {
-            "type": "string",
-            "value": "[variables('sitename')]"
-        }
-    }
+    ]
 }

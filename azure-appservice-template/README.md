@@ -1,6 +1,7 @@
 # Azure Resource Manager App Service Template #
 
-Deploy Azure Web App and Service Plan
+Deploy Azure Web App, Service Plan and App Deployment Slots into the AppService
+
 
 [![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
 
