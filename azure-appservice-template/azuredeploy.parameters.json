@@ -10,9 +10,9 @@
       },
       "environments": {
           "value": [
-              "",
-              "",
-              ""
+              "Test",
+              "Preview",
+              "PreProd"
           ]
       },
       "skuName": {

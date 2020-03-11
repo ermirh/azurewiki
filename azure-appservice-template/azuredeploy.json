@@ -13,9 +13,9 @@
         },
         "environments": {
             "defaultValue": [
-                "Dev",
-                "UAT",
-                "Preview"
+                "Test",
+                "Preview",
+                "PreProd"
             ],
             "maxLength": 15,
             "type": "Array",
