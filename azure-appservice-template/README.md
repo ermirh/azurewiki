@@ -1,6 +1,7 @@
 # Azure Resource Manager App Service Template #
 
-Deploy Azure Web App, Service Plan and App Deployment Slots into the AppService
+This template deploy an Azure Web App, Service Plan associated and 2 Deployment Slots into the AppService. named Test, PreProd. Also assign an Managed Identity principal to the App Service site.
+
 
 
 [![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
