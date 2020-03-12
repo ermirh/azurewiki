@@ -32,7 +32,7 @@
             ],
             "type": "String"
         },
-        "ContainerName": {
+        "containerName": {
             "type": "String",
             "metadata": {
                 "description": "Create a private container in Storage Blobs"
@@ -57,7 +57,7 @@
                 "name": "Standard_RAGRS"
             }
         },
-        "containerName": "[substring(concat(parameters('ContainerName'),variables('suffix')),0,20)]"
+        "containerName": "[substring(concat(parameters('containerName'),variables('suffix')),0,20)]"
     },
     "resources": [
         {

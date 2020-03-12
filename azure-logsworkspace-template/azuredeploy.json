@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "String",
+            "minLength": 4,
+            "maxLength": 63
+        },
+        "sku": {
+            "type": "String",
+            "allowedValues": [
+                "Free",
+                "Standard",
+                "Premium",
+                "PerNode",
+                "PerGB2018",
+                "Standalone"
+            ]
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "suffix": "[uniqueString(resourceGroup().location,resourceGroup().id)]",
+        "workspacename": "[concat(parameters('name'),variables('suffix'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2015-11-01-preview",
+            "name": "[variables('workspacename')]",
+            "location": "[variables('location')]",
+            "tags": {},
+            "properties": {
+                "sku": {
+                    "name": "[parameters('sku')]"
+                },
+                "retentionInDays": 365
+            },
+            "resources": [
+                {
+                    "name": "[concat(variables('workspacename'),'/','storage')]",
+                    "type": "Microsoft.OperationalInsights/workspaces/linkedServices",
+                    "apiVersion": "2015-11-01-preview",
+                    "tags": {},
+                    "kind": "AzureActivityLog",
+                    "properties": {
+                        "resourceId": "string"
+                        }
+                }
+            ]
+        }
+    ]
+}
