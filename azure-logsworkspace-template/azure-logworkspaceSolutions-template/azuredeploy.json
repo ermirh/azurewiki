@@ -35,7 +35,7 @@
                         "publisher": "Microsoft"
                         },
                     "properties": {
-                    "workspaceResourceId": "[Concat('/subscriptions/', variables('subscriptionId'), '/resourceGroups/', variables('workspaceresourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+                        "workspaceResourceId": "[Concat('/subscriptions/', variables('subscriptionId'), '/resourceGroups/', variables('workspaceresourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
