@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspaceName": {
+            "type": "String"
+        },
+        "solutionTypes": {
+             "defaultValue": [
+                 "AzureAppGatewayAnalytics",
+                 "KeyVaultAnalytics",
+                 "AzureNSGAnalytics",
+                 "ADAssessment",
+                 "SQLAssessment",
+                 "Security"
+             ],
+             "type": "Array"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "subscriptionId": "[subscription().subscriptionId]",
+        "workspaceresourceGroup": "[resourceGroup().name]"
+    },
+    "resources": [
+                {
+                    "type": "Microsoft.OperationsManagement/solutions",
+                    "apiVersion": "2015-11-01-preview",
+                    "name": "[Concat(parameters('solutionTypes')[copyIndex()], '(', parameters('workspaceName'), ')')]",
+                    "location": "[variables('location')]",
+                    "plan": {
+                        "name": "[Concat(parameters('solutionTypes')[copyIndex()], '(', parameters('workspaceName'), ')')]",
+                        "product": "[Concat('OMSGallery/', parameters('solutionTypes')[copyIndex()])]",
+                        "promotionCode": "",
+                        "publisher": "Microsoft"
+                        },
+                    "properties": {
+                    "workspaceResourceId": "[Concat('/subscriptions/', variables('subscriptionId'), '/resourceGroups/', variables('workspaceresourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
+                    ],
+                    "id": "[Concat('/subscriptions/', variables('subscriptionId'), '/resourceGroups/', variables('workspaceresourceGroup'), '/providers/Microsoft.OperationsManagement/solutions/', parameters('solutionTypes')[copyIndex()], '(', parameters('workspaceName'), ')')]",
+                    "copy": {
+                        "name": "solutionsCopy",
+                        "count": "[length(parameters('solutionTypes'))]"
+                    }
+                }
+    ]
+}
