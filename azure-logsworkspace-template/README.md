@@ -1,6 +1,7 @@
 # Azure Log Analytics Workspace ARM template deployment #
 
-Creating a LOG Analytics Workspace
+Creating a Log Analytics Workspace, central hub for all your resources logs in Azure. 
+Getting started: https://docs.microsoft.com/en-us/azure/azure-monitor/log-query/get-started-portal
 
 
 [![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
