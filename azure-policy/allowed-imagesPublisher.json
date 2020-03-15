@@ -1,0 +1,35 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Compute/virtualMachines"
+        },
+        {
+          "not": {
+              "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.publisher",
+              "in": "[parameters('imagePublisher')]"        
+          }
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  },
+  "parameters": {
+    "imagePublisher": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Publisher",
+        "description": "Allow only OS images from Microsoft and RHEL Publisher "
+      },
+      "allowedValues": [
+        "MicrosoftWindowsServer",
+        "RHEL"
+      ]
+    }
+  }
+}
