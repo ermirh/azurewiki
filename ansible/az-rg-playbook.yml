@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create resource group
+      azure_rm_resourcegroup:
+        name: ansible-demo-rg13032020
+        location: westeurope
+        state: present
+        tags:
+          source: ansible
+          type: resourcegroup
+      register: rg
+    - debug:
+        var: rg
