@@ -1,8 +1,0 @@
-az login
-az ad sp create-for-rbac --name sp-terraform --role "Contributor"
-az account list
-
-export ARM_CLIENT_ID="2ec18310-bb72-4e0c-bcee-83ce50126175"
-export ARM_CLIENT_SECRET="6dc981b0-0e38-4050-af44-f13c7ca86475"
-export ARM_SUBSCRIPTION_ID="71fe3a4a-239d-4df8-8397-4a96c7a09c93"
-export ARM_TENANT_ID="7055ffae-d714-4437-897a-7aaa25c5c4a7"
