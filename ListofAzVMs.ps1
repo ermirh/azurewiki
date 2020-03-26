@@ -1,5 +1,5 @@
 #Provide the subscription Id where the VMs reside
-$subscriptionId = ""
+$subscriptionId = "<sub_id>"
 
 #Provide the name of the csv file to be exported
 $reportName = "AzVMsReport.csv"
@@ -20,5 +20,5 @@ foreach ($nic in $nics) {
         $info.PrivateIpAddress = $nic.IpConfigurations.PrivateIpAddress 
         $report+=$info 
 } 
-$report | ft VmName, ResourceGroupName, Region, VirtualNetwork, Subnet, PrivateIpAddress, OsType
+$report | Format-Table VmName, ResourceGroupName, Region, VirtualNetwork, Subnet, PrivateIpAddress, OsType
 $report | Export-CSV "c:/$reportName"
