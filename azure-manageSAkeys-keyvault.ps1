@@ -1,4 +1,4 @@
-# login to Azure account 
+# login to Azure account
 Connect-AzAccount
 
 # select the subscription to work in, deploying resources

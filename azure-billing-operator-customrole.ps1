@@ -16,7 +16,7 @@ $role.AssignableScopes.Clear()
 # use this cmdlet to get all operations, actions for specific provider
 Get-AzProviderOperation "Microsoft.Billing/*" | Format-Table OperationName, Operation, Description
 
-# add action or notactions to the custom role, based on your needs.
+# add action or notActions to the custom role, based on your specific permissions.
 $role.Actions.Add("Microsoft.Billing/billingAccounts/billingProfiles/pricesheet/download/action")
 $role.Actions.Add("Microsoft.Billing/billingAccounts/billingProfiles/invoices/pricesheet/download/action")
 $role.Actions.Add("Microsoft.Billing/billingAccounts/billingProfiles/write")
@@ -26,8 +26,14 @@ $role.NotActions.Add("Microsoft.Billing/billingAccounts/billingProfiles/invoiceS
 
 $role.AssignableScopes.Add("/subscriptions/$($sub.Id)")
 
-# create the new custom role 
+# create the new custom role
 New-AzRoleDefinition -Role $role
 
 # verify the new custom role is created successfully. Now you can add role assigment using this role.
-(Get-AzRoleDefinition -Name "Billing Accounts Operator").Actions
+Get-AzRoleDefinition | ? {$_.IsCustom -eq $true} | FT Name, Description, IsCustom
+
+#get the object id for a user
+$user = (Get-AzADUser -DisplayName 'Az User1').id
+
+#assign the role to a user on the subscription level
+New-AzRoleAssignment -ObjectId $user -RoleDefinitionName 'Billing Accounts Operator' -Scope '/subscriptions/$($sub.Id)'
