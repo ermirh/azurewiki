@@ -8,98 +8,46 @@
                 "description": "The name of the container registry."
             }
         },
-        "registryLocation": {
-            "type": "String",
-            "metadata": {
-                "description": "The location of the container registry. This cannot be changed after the resource is created."
-            }
-        },
         "registrySku": {
-            "defaultValue": "Standard",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+            ],
             "type": "String",
             "metadata": {
                 "description": "The SKU of the container registry."
-            }
-        },
-        "registryApiVersion": {
-            "type": "String",
-            "metadata": {
-                "description": "The API version of the container registry."
-            }
-        },
-        "adminUserEnabled": {
-            "defaultValue": false,
-            "type": "Bool",
-            "metadata": {
-                "description": "The value that indicates whether the admin user is enabled."
-            }
-        },
-        "tags": {
-            "defaultValue": {},
-            "type": "Object",
-            "metadata": {
-                "description": "The tags of the resource."
-            }
-        },
-        "encryptionEnabled": {
-            "defaultValue": "disabled",
-            "type": "String",
-            "metadata": {
-                "description": "The value that indicates whether encryption is enabled."
-            }
-        },
-        "identity": {
-            "defaultValue": "",
-            "type": "String",
-            "metadata": {
-                "description": "The identity to use for encryption."
-            }
-        },
-        "identityResourceId": {
-            "defaultValue": "",
-            "type": "String",
-            "metadata": {
-                "description": "The resource id of identity to use for encryption."
-            }
-        },
-        "keyIdentifier": {
-            "defaultValue": "",
-            "type": "String",
-            "metadata": {
-                "description": "The key identifier to use for encryption."
             }
         }
     },
     "variables": {
         "suffix": "[toLower(concat(uniqueString(resourceGroup().id),resourceGroup().location))]",
         "registryName": "[concat(parameters('registryName'),variables('suffix'))]",
-        "identityProperties": {
-            "type": "userAssigned",
-            "userAssignedIdentities": {
-                "[parameters('identityResourceId')]": {}
-            }
-        },
-        "encryptionKeyVaultProperties": {
-            "identity": "[parameters('identity')]",
-            "KeyIdentifier": "[parameters('keyIdentifier')]"
-        }
+        "location": "[resourceGroup().location]",
+        "adminUserEnabled": true
     },
     "resources": [
         {
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2019-05-01",
             "name": "[variables('registryName')]",
-            "location": "[parameters('registryLocation')]",
-            "tags": "[parameters('tags')]",
+            "location": "[variables('location')]",
+            "tags": {},
             "sku": {
                 "name": "[parameters('registrySku')]"
             },
-            "identity": "[if(equals(parameters('encryptionEnabled'), 'enabled'), variables('identityProperties'), json('null'))]",
             "properties": {
-                "adminUserEnabled": "[parameters('adminUserEnabled')]",
-                "encryption": {
-                    "status": "[parameters('encryptionEnabled')]",
-                    "keyVaultProperties": "[if(equals(parameters('encryptionEnabled'), 'enabled'), variables('encryptionKeyVaultProperties'), json('null'))]"
+                "adminUserEnabled": "[variables('adminUserEnabled')]",
+                "policies": {
+                    "trustPolicy": {
+                        "type": "Notary",
+                        "status": "enabled"
+                    },
+                    "retentionPolicy": {
+                        "days": 90,
+                        "status": "enabled"
+                    }
                 }
             }
         }
