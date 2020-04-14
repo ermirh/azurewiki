@@ -1,0 +1,42 @@
+$aksclustername="aksdemoaad140420"
+$tenantId=$(az account show --query tenantId -o tsv)
+
+# create server AAD application for AKS
+$serverAADappID=$(az ad app create --display-name "${aksclustername}server" --identifier-uris "https://${aksclustername}server" --query appId -o tsv)
+az ad app update --id $serverAADappID --set groupMembershipClaims=All
+
+# service principal for server AAD app
+az ad sp create --id $serverAADappID
+
+$serverAADappSecret=$(az ad sp credential reset --name $serverAADappID --credential-description "AKSPassword" --query password -o tsv)
+
+# grant permissions to server AAD app
+az ad app permission add --id $serverAADappID --api 00000003-0000-0000-c000-000000000000 --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope 06da0dbc-49e2-44d2-8312-53f166ab848a=Scope 7ab1d382-f21e-4acd-a863-ba3e13f7da61=Role
+az ad app permission grant --id $serverAADappID --api 00000003-0000-0000-c000-000000000000
+az ad app permission admin-consent --id $serverAADappID
+
+# create client AAD application for AKS cli
+$clientAADappId=$(az ad app create --display-name "${aksclustername}client" --native-app --reply-urls "https://${aksname}Client" --query appId -o tsv)
+
+# service principal for client aad application
+az ad sp create --id $clientAADappId
+
+$oAuthPermissionServerAppId=$(az ad app show --id $serverAADappID --query "oauth2Permissions[0].id" -o tsv)
+
+# grant client aad app permission to the server app
+az ad app permission add --id $clientAADappId --api $serverAADappID --api-permissions ${oAuthPermissionServerAppId}=Scope
+az ad app permission grant --id $clientAADappId --api $serverAADappID
+
+# deploy the AKS cluster
+
+az group create --name aksdemo-rg001 --location WestEurope
+
+az aks create --resource-group aksdemo-rg001 --name $aksclustername --node-count 1 --generate-ssh-keys --aad-server-app-id $serverAADappID --aad-server-app-secret $serverAADappSecret --aad-client-app-id $clientAADappId --aad-tenant-id $tenantId
+
+az aks get-credentials --resource-group aksdemo-rg001 --name $aksclustername --admin
+
+az ad signed-in-user show --query userPrincipalName -o tsv
+
+kubectl get no
+kubectl apply -f myuser-aks-aad-binding.yml
+kubectl get pods --all-namespaces
