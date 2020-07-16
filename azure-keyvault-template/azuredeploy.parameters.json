@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "keyVaultName": {
-            "value": "azwiki-keyvault-001"
+            "value": "azwikikeyvault637w3he4"
         },
         "objectId": {
-            "value": "f7fd1ea7-79df-4b41-9eb8-001cd400d654"
+            "value": ""
         },
         "secretName": {
             "value": "azwikiadminpassword"
